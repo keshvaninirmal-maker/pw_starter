@@ -8,19 +8,17 @@ test.describe('Cart', () => {
     itemName = await shopFacade.addToCartAndGoToCart(PRODUCTS.search.validKeyword);
   });
 
-  test('C01 add single product appears in cart @regression', async ({ page }) => {
-    const rows = page.getByRole('row').filter({ hasNot: page.getByRole('columnheader') });
-    await expect(rows).toHaveCount(1);
+  test('C01 add single product appears in cart @regression', async ({ cartPage }) => {
+    await expect(cartPage.cartRows).toHaveCount(1);
   });
 
-  test('C02 add multiple products shows multiple rows @regression', async ({ homePage, page }) => {
+  test('C02 add multiple products shows multiple rows @regression', async ({ homePage, productPage, cartPage }) => {
     await homePage.navigate();
     await homePage.filterByCategory(PRODUCTS.categories.powerTools);
     await homePage.getProductCardNames().first().click();
-    await page.locator('[data-test="add-to-cart"]').click();
-    await page.goto('/cart');
-    const rows = page.getByRole('row').filter({ hasNot: page.getByRole('columnheader') });
-    await expect(rows).toHaveCount(2);
+    await productPage.addToCartButton.click();
+    await cartPage.navigate();
+    await expect(cartPage.cartRows).toHaveCount(2);
   });
 
   test('C03 increase item quantity @regression', async ({ cartPage }) => {
@@ -39,10 +37,9 @@ test.describe('Cart', () => {
     await expect(input).toHaveValue('2');
   });
 
-  test('C05 remove item reduces cart count @regression', async ({ cartPage, page }) => {
+  test('C05 remove item reduces cart count @regression', async ({ cartPage }) => {
     await cartPage.getItemRemoveButton(itemName).click();
-    const rows = page.getByRole('row').filter({ hasNot: page.getByRole('columnheader') });
-    await expect(rows).toHaveCount(0);
+    await expect(cartPage.cartRows).toHaveCount(0);
   });
 
   test('C06 remove all items shows empty cart state @regression', async ({ cartPage, page }) => {

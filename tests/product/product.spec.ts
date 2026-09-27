@@ -10,7 +10,6 @@ test.describe('Product', () => {
     await homePage.searchFor(PRODUCTS.search.validKeyword);
     const names = homePage.getProductCardNames();
     await expect(names.first()).toBeVisible();
-    expect(await names.count()).toBeGreaterThan(0);
   });
 
   test('P02 search non-existing product shows empty state @regression', async ({ homePage, page }) => {

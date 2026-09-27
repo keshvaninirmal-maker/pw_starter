@@ -11,4 +11,4 @@ export const PRODUCTS = {
     priceAsc: 'price,asc',
     nameAsc: 'name,asc',
   },
-};
+} as const;

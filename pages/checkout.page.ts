@@ -1,4 +1,5 @@
-import { Page, Locator } from '@playwright/test';
+import { Locator } from '@playwright/test';
+import { BasePage } from './base.page';
 
 export interface AddressData {
   country: string;
@@ -17,9 +18,7 @@ export interface PaymentData {
   cardHolderName?: string;
 }
 
-export class CheckoutPage {
-  readonly page: Page;
-
+export class CheckoutPage extends BasePage {
   // Step 2 — Guest
   readonly continueAsGuestTab: Locator;
 
@@ -47,8 +46,8 @@ export class CheckoutPage {
   readonly cardHolderNameInput: Locator;
   readonly confirmButton: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(page: import('@playwright/test').Page) {
+    super(page);
 
     // Step 2 — Guest
     this.continueAsGuestTab = page.getByRole('tab', { name: 'Continue as Guest' });
@@ -76,7 +75,7 @@ export class CheckoutPage {
     this.confirmButton = page.getByRole('button', { name: 'Confirm' });
   }
 
-  async continueAsGuest(email: string, firstName: string, lastName: string) {
+  async continueAsGuest(email: string, firstName: string, lastName: string): Promise<void> {
     await this.continueAsGuestTab.click();
     await this.guestEmailInput.fill(email);
     await this.guestFirstNameInput.fill(firstName);
@@ -85,7 +84,7 @@ export class CheckoutPage {
     await this.proceedAfterGuestButton.click();
   }
 
-  async fillAddress(address: AddressData) {
+  async fillAddress(address: AddressData): Promise<void> {
     await this.countryDropdown.selectOption(address.country);
     await this.postalCodeInput.fill(address.postalCode);
     await this.houseNumberInput.fill(address.houseNumber);
@@ -95,7 +94,7 @@ export class CheckoutPage {
     await this.proceedToBillingButton.click();
   }
 
-  async fillPayment(payment: PaymentData) {
+  async fillPayment(payment: PaymentData): Promise<void> {
     await this.paymentMethodDropdown.selectOption(payment.method);
     if (payment.method === 'Credit Card') {
       await this.creditCardNumberInput.fill(payment.cardNumber ?? '');

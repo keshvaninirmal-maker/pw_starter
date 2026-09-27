@@ -1,4 +1,4 @@
-import { test as setup } from '@playwright/test';
+import { test as setup } from '../fixtures';
 import { USERS } from '../data/users';
 
 setup('save authenticated state', async ({ page }) => {

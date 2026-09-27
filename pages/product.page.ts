@@ -1,8 +1,7 @@
-import { Page, Locator } from '@playwright/test';
+import { Locator } from '@playwright/test';
+import { BasePage } from './base.page';
 
-export class ProductPage {
-  readonly page: Page;
-
+export class ProductPage extends BasePage {
   readonly productName: Locator;
   readonly productPrice: Locator;
   readonly productCategory: Locator;
@@ -15,8 +14,8 @@ export class ProductPage {
   readonly compareButton: Locator;
   readonly relatedProducts: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(page: import('@playwright/test').Page) {
+    super(page);
     this.productName = page.getByRole('heading', { level: 1 });
     this.productPrice = page.locator('[data-test="unit-price"]');
     this.productCategory = page.locator('[data-test="category"]');
@@ -32,14 +31,14 @@ export class ProductPage {
       .getByRole('heading', { level: 5 });
   }
 
-  async addToCart(qty = 1) {
+  async addToCart(qty: number = 1): Promise<void> {
     if (qty > 1) {
       await this.quantityInput.fill(String(qty));
     }
     await this.addToCartButton.click();
   }
 
-  async setQuantity(qty: number) {
+  async setQuantity(qty: number): Promise<void> {
     await this.quantityInput.fill(String(qty));
   }
 }
