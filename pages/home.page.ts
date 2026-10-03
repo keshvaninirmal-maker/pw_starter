@@ -9,18 +9,22 @@ export class HomePage extends BasePage {
   // no data-test on card elements; CSS substring match is the most stable fallback
   readonly productCards: Locator;
   readonly navContact: Locator;
+  readonly searchCaption: Locator;
+  readonly productNames: Locator;
 
   constructor(page: import('@playwright/test').Page) {
     super(page);
     this.searchInput = page.getByRole('textbox', { name: 'Search' });
     this.searchButton = page.getByRole('button', { name: 'Search' });
-    this.searchClearButton = page.getByRole('button', { name: 'X' });
+    this.searchClearButton = page.locator('[data-test="search-reset"]');
     this.sortDropdown = page.getByRole('combobox', { name: 'sort' });
     // no data-test on card wrapper; CSS class substring is the most reliable selector available
     this.productCards = page
       .locator('[class*="card"]')
       .filter({ has: page.getByRole('heading', { level: 5 }) });
     this.navContact = page.locator('[data-test="nav-contact"]');
+    this.searchCaption = page.locator('[data-test="search-caption"]');
+    this.productNames = page.locator('[data-test="product-name"]');
   }
 
   async navigate(): Promise<void> {
