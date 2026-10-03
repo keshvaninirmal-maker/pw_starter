@@ -8,4 +8,4 @@ export const USERS = {
     firstName: 'Guest',
     lastName: 'User',
   },
-};
+} as const;

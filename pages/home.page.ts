@@ -1,42 +1,55 @@
-import { Page, Locator } from '@playwright/test';
+import { Locator } from '@playwright/test';
+import { BasePage } from './base.page';
 
-export class HomePage {
-  readonly page: Page;
-
+export class HomePage extends BasePage {
   readonly searchInput: Locator;
   readonly searchButton: Locator;
   readonly searchClearButton: Locator;
   readonly sortDropdown: Locator;
+  // no data-test on card elements; CSS substring match is the most stable fallback
   readonly productCards: Locator;
+  readonly navContact: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(page: import('@playwright/test').Page) {
+    super(page);
     this.searchInput = page.getByRole('textbox', { name: 'Search' });
     this.searchButton = page.getByRole('button', { name: 'Search' });
     this.searchClearButton = page.getByRole('button', { name: 'X' });
     this.sortDropdown = page.getByRole('combobox', { name: 'sort' });
-    this.productCards = page.locator('[class*="card"]').filter({ has: page.getByRole('heading', { level: 5 }) });
+    // no data-test on card wrapper; CSS class substring is the most reliable selector available
+    this.productCards = page
+      .locator('[class*="card"]')
+      .filter({ has: page.getByRole('heading', { level: 5 }) });
+    this.navContact = page.locator('[data-test="nav-contact"]');
   }
 
-  async navigate() {
-    await this.page.goto('/');
+  async navigate(): Promise<void> {
+    await super.navigate('/');
   }
 
-  async searchFor(keyword: string) {
+  async searchFor(keyword: string): Promise<void> {
     await this.searchInput.fill(keyword);
     await this.searchButton.click();
   }
 
-  async filterByCategory(category: string) {
-    await this.page.getByRole('checkbox', { name: category }).check();
+  async filterByCategory(category: string): Promise<void> {
+    await this.getCategoryCheckbox(category).check();
   }
 
-  async sortBy(option: string) {
+  async sortBy(option: string): Promise<void> {
     await this.sortDropdown.selectOption(option);
   }
 
-  async clickProduct(name: string) {
-    await this.page.getByRole('heading', { name, level: 5 }).click();
+  async clickProduct(name: string): Promise<void> {
+    await this.getProductHeading(name).click();
+  }
+
+  getCategoryCheckbox(category: string): Locator {
+    return this.page.getByRole('checkbox', { name: category });
+  }
+
+  getProductHeading(name: string): Locator {
+    return this.page.getByRole('heading', { name, level: 5 });
   }
 
   getProductCardNames(): Locator {
@@ -44,7 +57,12 @@ export class HomePage {
   }
 
   getCartBadge(): Locator {
-    return this.page.locator('app-header').getByRole('link', { name: 'cart' }).locator('generic').last();
+    // no data-test on cart badge counter; structural selector targets the last generic inside the cart link
+    return this.page
+      .locator('app-header')
+      .getByRole('link', { name: 'cart' })
+      .locator('generic')
+      .last();
   }
 
   getPaginationButton(label: string): Locator {

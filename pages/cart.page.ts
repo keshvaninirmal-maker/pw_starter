@@ -1,25 +1,28 @@
-import { Page, Locator } from '@playwright/test';
+import { Locator } from '@playwright/test';
+import { BasePage } from './base.page';
 
-export class CartPage {
-  readonly page: Page;
-
+export class CartPage extends BasePage {
   readonly cartTable: Locator;
   readonly cartRows: Locator;
   readonly cartTotal: Locator;
   readonly continueShoppingButton: Locator;
   readonly proceedToCheckoutButton: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(page: import('@playwright/test').Page) {
+    super(page);
     this.cartTable = page.getByRole('table');
     this.cartRows = page.getByRole('row').filter({ hasNot: page.getByRole('columnheader') });
-    this.cartTotal = page.getByRole('cell', { name: 'Total' }).locator('..').getByRole('cell').last();
+    this.cartTotal = page
+      .getByRole('cell', { name: 'Total' })
+      .locator('..')
+      .getByRole('cell')
+      .last();
     this.continueShoppingButton = page.getByRole('button', { name: 'Continue Shopping' });
     this.proceedToCheckoutButton = page.locator('[data-test="proceed-1"]');
   }
 
-  async navigate() {
-    await this.page.goto('/checkout');
+  async navigate(): Promise<void> {
+    await super.navigate('/cart');
   }
 
   getItemQuantityInput(itemName: string): Locator {
@@ -27,14 +30,18 @@ export class CartPage {
   }
 
   getItemRemoveButton(itemName: string): Locator {
-    return this.page.getByRole('row', { name: new RegExp(itemName) }).locator('img[src*="trash"], img[alt*="delete"], td:last-child img').last();
+    // no data-test on remove image; CSS fallback targets trash icon
+    return this.page
+      .getByRole('row', { name: new RegExp(itemName) })
+      .locator('img[src*="trash"], img[alt*="delete"], td:last-child img')
+      .last();
   }
 
-  async updateQuantity(itemName: string, qty: number) {
+  async updateQuantity(itemName: string, qty: number): Promise<void> {
     await this.getItemQuantityInput(itemName).fill(String(qty));
   }
 
-  async proceedToCheckout() {
+  async proceedToCheckout(): Promise<void> {
     await this.proceedToCheckoutButton.click();
   }
 }

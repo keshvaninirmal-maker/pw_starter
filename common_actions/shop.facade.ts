@@ -25,12 +25,14 @@ export class ShopFacade {
   async addToCartAndGoToCart(keyword: string): Promise<string> {
     const name = await this.addToCart(keyword);
     await this.page.goto('/cart');
+    await this.page.waitForLoadState('networkidle');
     return name;
   }
 
   async addToCartAndGoToCheckout(keyword: string): Promise<void> {
     await this.addToCart(keyword);
     await this.page.goto('/checkout');
+    await this.page.waitForLoadState('networkidle');
   }
 
   async fullGuestCheckout(
