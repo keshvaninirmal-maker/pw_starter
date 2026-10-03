@@ -45,6 +45,7 @@ Tests are layered; new tests should use the layers rather than raw selectors:
 All new tests, page objects, and data files must follow [`references/coding-guidelines.md`](references/coding-guidelines.md).
 
 Key rules at a glance:
+
 - Import `test`/`expect` from `../../fixtures`, never from `@playwright/test`
 - All locators defined as `readonly` properties in the page object constructor — never inline
 - No `waitForTimeout` — use web-first assertions and `waitFor({ state })`

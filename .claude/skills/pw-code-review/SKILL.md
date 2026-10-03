@@ -17,6 +17,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ## Review Phases
 
 ### Phase A — Imports & Fixtures
+
 > Rule source: §5 of coding-guidelines.md
 
 1. Every spec imports `test` and `expect` from `../../fixtures`, **not** from `@playwright/test`.
@@ -26,6 +27,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase B — Selectors
+
 > Rule source: §1 and §2 of coding-guidelines.md
 
 4. Locators follow the priority order: `data-test` attribute → ARIA role + accessible name → `getByLabel`/`getByPlaceholder`/`getByText` → CSS class (last resort, with comment explaining why).
@@ -36,6 +38,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase C — Async & Waits
+
 > Rule source: §3 of coding-guidelines.md
 
 8. No `waitForTimeout()` anywhere — replace with `waitFor({ state: 'hidden' | 'visible' })` or a web-first assertion.
@@ -49,6 +52,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase D — Page Object Rules
+
 > Rule source: §4 of coding-guidelines.md
 
 12. Every page object class extends `BasePage`.
@@ -59,6 +63,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase E — Test Structure & Naming
+
 > Rule source: §6 and §7 of coding-guidelines.md
 
 16. Each spec file has exactly one top-level `test.describe`, named after the feature area.
@@ -68,7 +73,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 19. ID prefix matches the area:
 
     | Prefix | Area     |
-    |--------|----------|
+    | ------ | -------- |
     | `C`    | Cart     |
     | `CH`   | Checkout |
     | `P`    | Product  |
@@ -79,6 +84,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase F — Test Data
+
 > Rule source: §8 of coding-guidelines.md
 
 21. No hard-coded strings, emails, passwords, or product names inside specs — all values come from `data/` imports.
@@ -88,6 +94,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase G — TypeScript
+
 > Rule source: §9 of coding-guidelines.md
 
 24. All function parameters and return types are explicitly typed (no implicit `any` from missing annotations).
@@ -97,6 +104,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase H — Assertions
+
 > Rule source: §10 of coding-guidelines.md
 
 27. Web-first assertions are used throughout (`toBeVisible`, `toHaveText`, `toHaveValue`, etc.) — they auto-retry.
@@ -107,6 +115,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase I — Edge & Negative Cases
+
 > Rule source: §11 of coding-guidelines.md
 
 31. For every happy-path flow, verify there are corresponding tests covering:
@@ -118,6 +127,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase J — Parameterized Tests
+
 > Rule source: §12 and §13 of coding-guidelines.md
 
 33. Each loop iteration produces a **unique** test ID with the varying value embedded in the title.
@@ -127,6 +137,7 @@ When this skill is loaded, perform a systematic code review of the target file(s
 ---
 
 ### Phase K — No-Duplication Check
+
 > Rule source: §14 of coding-guidelines.md
 
 36. Before accepting a new helper function or flow, confirm nothing equivalent already exists in:

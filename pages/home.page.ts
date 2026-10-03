@@ -17,7 +17,9 @@ export class HomePage extends BasePage {
     this.searchClearButton = page.getByRole('button', { name: 'X' });
     this.sortDropdown = page.getByRole('combobox', { name: 'sort' });
     // no data-test on card wrapper; CSS class substring is the most reliable selector available
-    this.productCards = page.locator('[class*="card"]').filter({ has: page.getByRole('heading', { level: 5 }) });
+    this.productCards = page
+      .locator('[class*="card"]')
+      .filter({ has: page.getByRole('heading', { level: 5 }) });
     this.navContact = page.locator('[data-test="nav-contact"]');
   }
 
@@ -56,7 +58,11 @@ export class HomePage extends BasePage {
 
   getCartBadge(): Locator {
     // no data-test on cart badge counter; structural selector targets the last generic inside the cart link
-    return this.page.locator('app-header').getByRole('link', { name: 'cart' }).locator('generic').last();
+    return this.page
+      .locator('app-header')
+      .getByRole('link', { name: 'cart' })
+      .locator('generic')
+      .last();
   }
 
   getPaginationButton(label: string): Locator {

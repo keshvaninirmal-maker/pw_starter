@@ -40,14 +40,15 @@ async clickProceed() {
 
 ## 3. Async / Wait Patterns
 
-| Do | Do not |
-|----|--------|
-| `waitFor({ state: 'hidden' \| 'visible' })` | `waitForTimeout()` |
-| `waitForLoadState('networkidle')` after `goto()` | `page.waitForTimeout(2000)` |
-| `waitForURL(pattern)` after navigation | arbitrary `sleep` / `setTimeout` |
-| Web-first assertions (`toBeVisible`, `toHaveText`) — they auto-retry | Manual polling loops |
+| Do                                                                   | Do not                           |
+| -------------------------------------------------------------------- | -------------------------------- |
+| `waitFor({ state: 'hidden' \| 'visible' })`                          | `waitForTimeout()`               |
+| `waitForLoadState('networkidle')` after `goto()`                     | `page.waitForTimeout(2000)`      |
+| `waitForURL(pattern)` after navigation                               | arbitrary `sleep` / `setTimeout` |
+| Web-first assertions (`toBeVisible`, `toHaveText`) — they auto-retry | Manual polling loops             |
 
 **Skeleton wait pattern** (required before interacting with product lists):
+
 ```typescript
 await this.page.locator('[class="card skeleton"]').first().waitFor({ state: 'hidden' });
 ```
@@ -100,6 +101,7 @@ test.describe('Feature area', () => {
 ```
 
 Rules:
+
 - One `test.describe` per spec file, named after the feature area.
 - `beforeEach` for shared setup. `afterEach` only when explicit teardown is needed.
 - Tests must be **independent** — no mutable state shared between tests. `fullyParallel: true` is on.
@@ -111,12 +113,12 @@ Rules:
 
 Pattern: `test('<PREFIX><NN> <description> @<tag>', ...)`
 
-| Prefix | Area |
-|--------|------|
-| `C` | Cart |
-| `CH` | Checkout |
-| `P` | Product |
-| `CT` | Contact |
+| Prefix | Area     |
+| ------ | -------- |
+| `C`    | Cart     |
+| `CH`   | Checkout |
+| `P`    | Product  |
+| `CT`   | Contact  |
 
 - IDs must be **unique** across the entire suite — `--grep "C03"` must match exactly one test.
 - Add a new single-letter prefix for a new area; document it in `CLAUDE.md` Conventions.
@@ -169,6 +171,7 @@ Pattern: `test('<PREFIX><NN> <description> @<tag>', ...)`
 ## 11. Negative & Edge Case Tests
 
 Every happy-path flow must have corresponding error/validation tests:
+
 - Empty required fields
 - Invalid format (email, phone, etc.)
 - Boundary lengths (just under or over the limit)
@@ -193,6 +196,7 @@ for (const field of fields) {
 ```
 
 Rules:
+
 - Each iteration must produce a **unique test ID** (embed the varying value in the title).
 - Do not share mutable state between loop iterations.
 
@@ -210,6 +214,7 @@ Rules:
 ## 14. No-Duplication Rule
 
 Before adding a new helper, page object, or flow:
+
 1. Check `utils/helpers.ts` and `common_actions/shop.facade.ts` for existing implementations.
 2. Check `pages/` for an existing page object to extend.
 3. Reuse what exists. Only create a new abstraction when nothing suitable exists.

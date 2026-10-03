@@ -64,7 +64,9 @@ export class CheckoutPage extends BasePage {
     this.streetInput = page.locator('[data-test="street"]');
     this.cityInput = page.locator('[data-test="city"]');
     this.stateInput = page.locator('[data-test="state"]');
-    this.proceedToBillingButton = page.locator('app-address').getByRole('button', { name: 'Proceed to checkout' });
+    this.proceedToBillingButton = page
+      .locator('app-address')
+      .getByRole('button', { name: 'Proceed to checkout' });
 
     // Step 4 — Payment
     this.paymentMethodDropdown = page.locator('[data-test="payment-method"]');

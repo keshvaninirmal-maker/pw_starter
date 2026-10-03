@@ -39,7 +39,9 @@ test.describe('Contact', () => {
     await expect(contactPage.successAlert).toBeHidden();
   });
 
-  test('CT05 message shorter than 50 characters is rejected @regression', async ({ contactPage }) => {
+  test('CT05 message shorter than 50 characters is rejected @regression', async ({
+    contactPage,
+  }) => {
     await contactPage.fillForm({ ...CONTACT.valid, message: CONTACT.shortMessage });
     await contactPage.submit();
     await expect(contactPage.getError('Message must be minimal 50 characters')).toBeVisible();
@@ -53,7 +55,10 @@ test.describe('Contact', () => {
     await expect(contactPage.firstName).toBeHidden();
   });
 
-  test('CT07 contact page reachable from navigation menu @regression', async ({ homePage, page }) => {
+  test('CT07 contact page reachable from navigation menu @regression', async ({
+    homePage,
+    page,
+  }) => {
     await homePage.navigate();
     await homePage.navContact.click();
     await expect(page).toHaveURL(/\/contact$/);
@@ -61,11 +66,13 @@ test.describe('Contact', () => {
 
   test('CT08 subject dropdown includes Payments option @regression', async ({ contactPage }) => {
     await expect(
-      contactPage.subject.locator('option').filter({ hasText: CONTACT.paymentsSubject })
+      contactPage.subject.locator('option').filter({ hasText: CONTACT.paymentsSubject }),
     ).toBeAttached();
   });
 
-  test('CT09 contact page has no standalone payment section @regression', async ({ contactPage }) => {
+  test('CT09 contact page has no standalone payment section @regression', async ({
+    contactPage,
+  }) => {
     await expect(contactPage.paymentSectionHeading).toBeHidden();
   });
 });

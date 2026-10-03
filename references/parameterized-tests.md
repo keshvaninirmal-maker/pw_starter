@@ -19,13 +19,16 @@ import { expect, test } from '../../fixtures';
 import { PRODUCTS } from '../../data/products';
 
 const SEARCH_CASES = [
-  { id: 'P10', keyword: PRODUCTS.search.validKeyword,   expectResults: true  },
+  { id: 'P10', keyword: PRODUCTS.search.validKeyword, expectResults: true },
   { id: 'P11', keyword: PRODUCTS.search.invalidKeyword, expectResults: false },
-  { id: 'P12', keyword: 'Hammer',                       expectResults: true  },
+  { id: 'P12', keyword: 'Hammer', expectResults: true },
 ];
 
 for (const { id, keyword, expectResults } of SEARCH_CASES) {
-  test(`${id} search "${keyword}" shows results: ${expectResults} @regression`, async ({ homePage, page }) => {
+  test(`${id} search "${keyword}" shows results: ${expectResults} @regression`, async ({
+    homePage,
+    page,
+  }) => {
     await homePage.navigate();
     await homePage.search(keyword);
     if (expectResults) {
@@ -50,8 +53,8 @@ import { expect, test } from '../../fixtures';
 import { PRODUCTS } from '../../data/products';
 
 const PAYMENT_CASES = [
-  { id: 'CH10', method: 'Bank Transfer',  expectSuccess: true  },
-  { id: 'CH11', method: 'Credit Card',    expectSuccess: false }, // invalid card tested separately
+  { id: 'CH10', method: 'Bank Transfer', expectSuccess: true },
+  { id: 'CH11', method: 'Credit Card', expectSuccess: false }, // invalid card tested separately
   { id: 'CH12', method: 'Cash on Delivery', expectSuccess: true },
 ];
 
@@ -61,7 +64,10 @@ test.describe('Checkout payment methods', () => {
   });
 
   for (const { id, method, expectSuccess } of PAYMENT_CASES) {
-    test(`${id} checkout with payment method "${method}" @regression`, async ({ checkoutPage, page }) => {
+    test(`${id} checkout with payment method "${method}" @regression`, async ({
+      checkoutPage,
+      page,
+    }) => {
       // ... fill address, then:
       await checkoutPage.fillPayment({ method });
       if (expectSuccess) {
@@ -83,8 +89,8 @@ For larger or reusable datasets, export the array from `data/` and import it int
 ```typescript
 // data/payment-methods.ts
 export const PAYMENT_METHODS = [
-  { id: 'CH10', method: 'Bank Transfer',    expectSuccess: true  },
-  { id: 'CH11', method: 'Cash on Delivery', expectSuccess: true  },
+  { id: 'CH10', method: 'Bank Transfer', expectSuccess: true },
+  { id: 'CH11', method: 'Cash on Delivery', expectSuccess: true },
 ] as const;
 ```
 
@@ -101,12 +107,12 @@ for (const c of PAYMENT_METHODS) {
 
 ## Naming conventions
 
-| Element | Rule |
-|---|---|
-| Test ID | Unique per case within the area prefix (`C`, `CH`, `P`) — `C10`, `C11`, not `C10a` |
-| Test title | Embed the varying value so the HTML report row is self-describing |
-| Tag | Always end with `@regression` (or a more specific tag) |
-| Data file | `data/<domain>.ts` — named after the domain, not the spec |
+| Element    | Rule                                                                               |
+| ---------- | ---------------------------------------------------------------------------------- |
+| Test ID    | Unique per case within the area prefix (`C`, `CH`, `P`) — `C10`, `C11`, not `C10a` |
+| Test title | Embed the varying value so the HTML report row is self-describing                  |
+| Tag        | Always end with `@regression` (or a more specific tag)                             |
+| Data file  | `data/<domain>.ts` — named after the domain, not the spec                          |
 
 ---
 
@@ -136,10 +142,7 @@ npx playwright test --grep "@regression"  # all tagged regression cases
 Use `as const` on the dataset so TypeScript narrows string literals:
 
 ```typescript
-const CASES = [
-  { method: 'Bank Transfer' as const },
-  { method: 'Credit Card'   as const },
-];
+const CASES = [{ method: 'Bank Transfer' as const }, { method: 'Credit Card' as const }];
 ```
 
 Or define a union type in `data/` and assert each row against it to catch typos at compile time:

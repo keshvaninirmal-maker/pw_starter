@@ -24,10 +24,13 @@ Read `references/coding-guidelines.md` in full before generating any code. Every
 - [ ] Each test is independent and parallel-safe
 
 ## 1. Read the conventions first
+
 Read `CLAUDE.md`, `fixtures/index.ts`, `pages/base.page.ts`, one existing page object and one existing spec. Match their style, naming and comment density. Note the current ID prefixes so the new ones don't collide (`grep -rhn "test('" tests`).
 
 ## 2. Explore the live page (never invent selectors)
+
 Use the Playwright MCP tools (load them with ToolSearch if deferred):
+
 1. `browser_navigate`, then `browser_snapshot`. SPAs render late, so if the snapshot looks empty, snapshot again.
 2. List every field, button, dropdown, link and its options.
 3. Get stable locators. Prefer `data-test` attributes: use `browser_run_code_unsafe` to dump them with `page.locator('[data-test]').evaluateAll(...)`.
@@ -35,7 +38,9 @@ Use the Playwright MCP tools (load them with ToolSearch if deferred):
 5. Save nothing secret. Use only public demo data.
 
 ## 3. Design the test cases before coding
+
 Cover, at a minimum, for the feature:
+
 - **Presence**: key elements are visible and enabled.
 - **Happy path**: valid input gives the expected success state.
 - **Negative**: empty required fields, invalid format, boundary lengths (just under the limit), one test per rule.
@@ -43,11 +48,13 @@ Cover, at a minimum, for the feature:
 - **Navigation**: the feature is reachable the way a user reaches it.
 
 Rules for each test:
+
 - One behavior per test, independent of the others, no order dependency.
 - Assert user-visible outcomes, not implementation details.
 - Tests that need setup use `beforeEach`, or a facade in `common_actions/` if the setup spans pages.
 
 ## 4. Implement, one file per layer
+
 - `pages/<name>.page.ts`: class extending `BasePage`. Locators as `readonly` properties created in the constructor, intent-named actions (`fillForm`, `submit`), and small helpers for parameterized locators (e.g. `getError(text)`). No assertions inside page objects.
 - `data/<name>.ts`: exported constant with valid data, boundary and invalid values, and expected message texts. No literals in specs.
 - `fixtures/index.ts`: register the page object in the `TestFixtures` type and in `base.extend`.
@@ -55,6 +62,7 @@ Rules for each test:
 - Use the spread pattern to vary one field from valid data: `fillForm({ ...DATA.valid, email: DATA.invalidEmail })`.
 
 ## 5. Best practices (enforce these)
+
 - **Locators**: `data-test` or role-based first; CSS classes only as a last resort; never XPath by position.
 - **Waiting**: rely on Playwright auto-waiting and web-first assertions (`toBeVisible`, `toHaveText`, `toHaveURL`). No `waitForTimeout`, no `sleep`. Avoid `networkidle` except where the framework's `navigate()` already does it.
 - **Assertions**: assert the specific message or state, plus a negative assertion where relevant (for example success alert hidden after invalid input).
@@ -65,6 +73,7 @@ Rules for each test:
 - **Stability**: do not assert on things that change on their own (dates, counts from shared demo data, ordering).
 
 ## 6. Verify
+
 1. `npx tsc --noEmit` must be clean.
 2. Run the guidelines compliance checklist from Step 0 against the generated code. Fix any violations before proceeding.
 3. Run only the new tests: `npx playwright test tests/<Area> --reporter=list`.
@@ -73,4 +82,5 @@ Rules for each test:
 6. Delete scratch files created by exploration (`.playwright-mcp/`) or tell the user if they are locked.
 
 ## 7. Report
+
 State what was created (files and test IDs with one-line meanings), what was run and its actual result, and anything unverified. Update `CLAUDE.md` only if a new convention was introduced (for example a new ID prefix).

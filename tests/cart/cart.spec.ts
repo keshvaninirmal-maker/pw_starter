@@ -12,7 +12,11 @@ test.describe('Cart', () => {
     await expect(cartPage.cartRows).toHaveCount(1);
   });
 
-  test('C02 add multiple products shows multiple rows @regression', async ({ homePage, productPage, cartPage }) => {
+  test('C02 add multiple products shows multiple rows @regression', async ({
+    homePage,
+    productPage,
+    cartPage,
+  }) => {
     await homePage.navigate();
     await homePage.filterByCategory(PRODUCTS.categories.powerTools);
     await homePage.getProductCardNames().first().click();
@@ -52,6 +56,9 @@ test.describe('Cart', () => {
     const input = cartPage.getItemQuantityInput(itemName);
     await input.fill('5');
     await input.press('Tab');
-    await expect(cartPage.cartTotal, 'cart total should update after quantity change').not.toHaveText(before || '', { timeout: 5000 });
+    await expect(
+      cartPage.cartTotal,
+      'cart total should update after quantity change',
+    ).not.toHaveText(before || '', { timeout: 5000 });
   });
 });
