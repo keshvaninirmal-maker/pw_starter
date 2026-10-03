@@ -2,6 +2,7 @@ export const PRODUCTS = {
   search: {
     validKeyword: 'Pliers',
     invalidKeyword: 'xyzabc123',
+    captionPrefix: 'Searched for: ',
   },
   categories: {
     handTools: 'Hand Tools',

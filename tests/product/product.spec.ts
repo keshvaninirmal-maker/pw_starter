@@ -44,4 +44,24 @@ test.describe('Product', () => {
     await homePage.getProductCardNames().first().click();
     await expect(page).toHaveURL(/\/product\//);
   });
+
+  test('P08 search results only contain products matching the keyword @regression', async ({
+    homePage,
+  }) => {
+    const keyword = PRODUCTS.search.validKeyword;
+    await homePage.searchFor(keyword);
+    await expect(homePage.searchCaption).toHaveText(`${PRODUCTS.search.captionPrefix}${keyword}`);
+    await expect(homePage.productNames.first()).toContainText(keyword);
+    await expect(
+      homePage.productNames.filter({ hasNotText: new RegExp(keyword, 'i') }),
+    ).toHaveCount(0);
+  });
+
+  test('P09 clearing search resets input and caption @regression', async ({ homePage }) => {
+    await homePage.searchFor(PRODUCTS.search.validKeyword);
+    await expect(homePage.searchCaption).toBeVisible();
+    await homePage.searchClearButton.click();
+    await expect(homePage.searchInput).toHaveValue('');
+    await expect(homePage.searchCaption).toBeHidden();
+  });
 });
