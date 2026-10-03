@@ -18,6 +18,8 @@ export class ContactPage extends BasePage {
   readonly attachment: Locator;
   readonly submitButton: Locator;
   readonly successAlert: Locator;
+  // used to assert absence of a dedicated payment section heading
+  readonly paymentSectionHeading: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -30,6 +32,8 @@ export class ContactPage extends BasePage {
     this.submitButton = page.locator('[data-test="contact-submit"]');
     // no data-test on success alert; CSS class fallback
     this.successAlert = page.locator('.alert-success');
+    // role-based: heading text contains "payment" (case-insensitive)
+    this.paymentSectionHeading = page.getByRole('heading', { name: /payment/i });
   }
 
   async open(): Promise<void> {

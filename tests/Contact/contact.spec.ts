@@ -58,4 +58,14 @@ test.describe('Contact', () => {
     await homePage.navContact.click();
     await expect(page).toHaveURL(/\/contact$/);
   });
+
+  test('CT08 subject dropdown includes Payments option @regression', async ({ contactPage }) => {
+    await expect(
+      contactPage.subject.locator('option').filter({ hasText: CONTACT.paymentsSubject })
+    ).toBeAttached();
+  });
+
+  test('CT09 contact page has no standalone payment section @regression', async ({ contactPage }) => {
+    await expect(contactPage.paymentSectionHeading).toBeHidden();
+  });
 });

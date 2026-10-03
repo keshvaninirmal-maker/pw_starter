@@ -11,6 +11,8 @@ Playwright + TypeScript test framework (starter repo for a Claude Code workshop)
 ```bash
 npm install && npx playwright install chromium   # setup
 npx tsc --noEmit                                 # type-check (no lint or build step exists)
+npm run lint | lint:fix                          # ESLint (typescript-eslint + eslint-plugin-playwright)
+npm run format:check | format                    # Prettier check / write
 npx playwright test                              # run everything
 npx playwright test tests/cart/cart.spec.ts      # one file
 npx playwright test --grep "CH01"                # one test by ID prefix

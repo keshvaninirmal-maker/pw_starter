@@ -7,6 +7,7 @@ export const CONTACT = {
     message: 'This is a valid contact message that is comfortably longer than fifty characters.',
   },
   subjects: ['Customer service', 'Webmaster', 'Return', 'Payments', 'Warranty', 'Status of my order'],
+  paymentsSubject: 'Payments',
   shortMessage: 'Too short',
   invalidEmail: 'not-an-email',
   successText: 'Thanks for your message! We will contact you shortly.',
